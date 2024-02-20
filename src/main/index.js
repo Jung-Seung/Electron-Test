@@ -37,6 +37,25 @@ function createWindow() {
   }
 }
 
+function createWindow(): void {
+  const mainWindow = new BrowserWindow({
+    width: 1300,
+    height: 670,
+    show: false,
+    autoHideMenuBar: true,
+    ...(process.platform === 'linux' ? { icon } : {}),
+    webPreferences: {
+      preload: join(__dirname, '.../preload/index.js'),
+      sandbox: false
+    }
+  })
+
+  setInterVal( () => {
+    const cpuUsage = process.getCPUUsage()
+    mainWindow.webContents.send('cpu-usage', cpuUsage)
+  }, 1000)
+}
+
 mainWindow.webContents.openDevTools()
 
 // This method will be called when Electron has finished
