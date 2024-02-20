@@ -81,6 +81,61 @@ app.whenReady().then(() => {
 
 	tray.setToolTip('이것은 나의 electron입니다.')
 	tray.setContextMenu(contextMenu)
+
+  const menu = new Menu()
+  menu.append(
+    new MenuItem({
+      label: app.name, 
+      submenu: [
+        { role: 'about' },
+        { type: 'separator' },
+        { role: 'services' },
+        { type: 'separator' },
+        { role: 'hide' },
+        { role: 'hideOthers' },
+        { role: 'unhide' },
+        { type: 'separator' },
+        { role: 'quit' }
+        ]
+    })
+  )
+
+  menu.append(
+    new MenuItem({
+    label: '수정', 
+    submenu: [
+      { role: 'undo' },
+      { role: 'redo' },
+      { type: 'separator' },
+      { role: 'cut' },
+      { role: 'copy' },
+      { role: 'paste' },
+      { role: 'pasteAndMathchStyle' },
+      { role: 'delete' },
+      { role: 'selectAll' },
+      { type: 'separator' },
+      {
+         label: 'Speech',
+         submenu: [{ role: 'startSpeaking' }, { role: 'stopSpeaking' }]
+      }
+    ]
+  })
+)
+  menu.append(
+    new MenuItem({
+      label: 'help',
+      submenu: [
+        {
+	label: 'electron 공식 사이트 이동',
+	click: async (): Promise<void> => {
+	  const { shell } = require('electron')
+	  await shell.openExternal('https://electronjs.org')
+	}
+        }
+      ]
+    })
+  )
+  Menu.setApplicationMenu(menu)
 })
 
 // Quit when all windows are closed, except on macOS. There, it's common
