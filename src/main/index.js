@@ -1,4 +1,4 @@
-import { app, shell, BrowserWindow, ipcMain, nativeImage } from 'electron'
+import { app, shell, BrowserWindow, ipcMain, nativeImage, Tray, MenuItem, Menu } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
@@ -65,7 +65,22 @@ app.whenReady().then(() => {
   })
 
   const icon = nativeImage.createFromDataURL();
-  tray = new Tray(icon)
+  tray = new Tray(icon);
+  const contextMenu = Menu.buildFromTemplate( [
+	  {
+	    label: 'electron 공식사이트 이동',
+	    type: 'normal',
+	    click: async (): Promise<void> => {
+	      const { shell } = require('electron')
+	      await shell.openExternal('https://electronjs.org')
+	    }
+	  },
+	  { label: 'item2', type: 'normal' },
+	  { label: 'item3', type: 'normal' }
+	])
+
+	tray.setToolTip('이것은 나의 electron입니다.')
+	tray.setContextMenu(contextMenu)
 })
 
 // Quit when all windows are closed, except on macOS. There, it's common
